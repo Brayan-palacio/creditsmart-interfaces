@@ -19,7 +19,7 @@ credit_smart_repo/
 3. Probar navegación entre `index.html`, `simulador.html` y `solicitar.html`.
 
 ## Capturas
-Incluye capturas de las 3 páginas (puedes agregarlas manualmente) para la entrega en Canvas.
+Capturas pendientes por agregar.
 
 ## Notas sobre desarrollo y commits
 Se recomiendan al menos 5 commits descriptivos durante el desarrollo:

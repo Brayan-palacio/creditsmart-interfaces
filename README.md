@@ -18,8 +18,16 @@ credit_smart_repo/
 2. Abrir `index.html` en tu navegador (no requiere servidor).
 3. Probar navegación entre `index.html`, `simulador.html` y `solicitar.html`.
 
-## Capturas
-Capturas pendientes por agregar.
+## 📸 Capturas de Pantalla
+
+### Página principal (Catálogo)
+![Página Principal](./captura_index.png)
+
+### Simulador de Crédito
+![Simulador](./captura_simulador.png)
+
+### Formulario Solicitar Crédito
+![Formulario](./captura_solicitar.png)
 
 ## Notas sobre desarrollo y commits
 Se recomiendan al menos 5 commits descriptivos durante el desarrollo:

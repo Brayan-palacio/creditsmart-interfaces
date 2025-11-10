@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CreditSmart - Catálogo de Créditos</title>
+  <!-- Tailwind CDN for educational/demo purposes -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-50 text-slate-900">
+  <header class="bg-white shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-xl font-semibold">CreditSmart</h1>
+      <nav aria-label="Navegación principal" class="space-x-3">
+        <a href="index.html" class="text-slate-600 hover:text-indigo-600 aria-current:text-indigo-600" aria-current="page">Catálogo</a>
+        <a href="simulador.html" class="text-slate-600 hover:text-indigo-600">Simulador</a>
+        <a href="solicitar.html" class="text-slate-600 hover:text-indigo-600">Solicitar Crédito</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8">
+    <section class="bg-white p-6 rounded-lg shadow-sm">
+      <h2 class="text-2xl font-bold">Encuentra el crédito que mejor se ajuste a ti</h2>
+      <p class="text-slate-600 mt-2">Compara tasas, plazos y requisitos. Usa el simulador para ver cuotas aproximadas.</p>
+      <div class="mt-4 flex gap-3">
+        <a class="inline-block px-4 py-2 bg-indigo-600 text-white rounded-lg" href="simulador.html">Ir al simulador</a>
+        <a class="inline-block px-4 py-2 border border-indigo-200 rounded-lg text-indigo-600" href="solicitar.html">Solicitar crédito</a>
+      </div>
+    </section>
+
+    <section aria-labelledby="catalogo-title" class="mt-6">
+      <h3 id="catalogo-title" class="text-xl font-semibold">Catálogo de Productos</h3>
+      <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="cardsGrid">
+        <!-- Card example -->
+        <article class="bg-white p-5 rounded-lg shadow hover:shadow-md" aria-labelledby="card1-title">
+          <h4 id="card1-title" class="text-lg font-medium">Crédito Personal</h4>
+          <p class="text-sm text-slate-500">Tasa: 1.8% mensual · Plazo: 12-36 meses</p>
+          <p class="mt-2 text-slate-700">Ideal para gastos personales, compras y consolidación de deudas.</p>
+          <div class="mt-4 flex gap-2">
+            <a class="px-3 py-1 bg-indigo-600 text-white rounded" href="simulador.html" data-product="Crédito Personal">Simular</a>
+            <a class="px-3 py-1 border rounded text-indigo-600" href="solicitar.html">Solicitar</a>
+          </div>
+        </article>
+
+        <article class="bg-white p-5 rounded-lg shadow hover:shadow-md" aria-labelledby="card2-title">
+          <h4 id="card2-title" class="text-lg font-medium">Crédito Vehicular</h4>
+          <p class="text-sm text-slate-500">Tasa: 1.5% mensual · Plazo: 12-60 meses</p>
+          <p class="mt-2 text-slate-700">Financiación para compra de vehículo 0km o usado.</p>
+          <div class="mt-4 flex gap-2">
+            <a class="px-3 py-1 bg-indigo-600 text-white rounded" href="simulador.html" data-product="Crédito Vehicular">Simular</a>
+            <a class="px-3 py-1 border rounded text-indigo-600" href="solicitar.html">Solicitar</a>
+          </div>
+        </article>
+
+        <article class="bg-white p-5 rounded-lg shadow hover:shadow-md" aria-labelledby="card3-title">
+          <h4 id="card3-title" class="text-lg font-medium">Crédito Hipotecario</h4>
+          <p class="text-sm text-slate-500">Tasa: 1.1% mensual · Plazo: 60-240 meses</p>
+          <p class="mt-2 text-slate-700">Para adquisición de vivienda con plazos y condiciones preferenciales.</p>
+          <div class="mt-4 flex gap-2">
+            <a class="px-3 py-1 bg-indigo-600 text-white rounded" href="simulador.html" data-product="Crédito Hipotecario">Simular</a>
+            <a class="px-3 py-1 border rounded text-indigo-600" href="solicitar.html">Solicitar</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="mt-6 bg-white p-4 rounded shadow">
+      <h4 class="font-semibold">Recomendaciones</h4>
+      <ul class="list-disc list-inside text-slate-600">
+        <li>Revisa requisitos antes de solicitar.</li>
+        <li>Usa el simulador para ver cuotas aproximadas.</li>
+        <li>Contacta a un asesor para condiciones personalizadas.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="mt-8 border-t bg-white">
+    <div class="max-w-6xl mx-auto px-4 py-4 text-sm text-slate-600">
+      CreditSmart &copy; <span id="year"></span> — Proyecto de Diseño de Interfaces Web
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.querySelectorAll('[data-product]').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const product = this.getAttribute('data-product');
+        window.location.href = 'simulador.html?producto=' + encodeURIComponent(product);
+      });
+    });
+  </script>
+</body>
+</html>

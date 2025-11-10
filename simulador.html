@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CreditSmart - Simulador</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-50 text-slate-900">
+  <header class="bg-white shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-xl font-semibold">CreditSmart</h1>
+      <nav aria-label="Navegación principal" class="space-x-3">
+        <a href="index.html" class="text-slate-600 hover:text-indigo-600">Catálogo</a>
+        <a href="simulador.html" class="text-indigo-600" aria-current="page">Simulador</a>
+        <a href="solicitar.html" class="text-slate-600 hover:text-indigo-600">Solicitar Crédito</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-8">
+    <section class="bg-white p-6 rounded-lg shadow-sm" aria-labelledby="sim-title">
+      <h2 id="sim-title" class="text-2xl font-bold">Simulador de Créditos</h2>
+      <p class="text-slate-600 mt-2">Introduce los datos para calcular una cuota aproximada.</p>
+
+      <form id="simForm" class="mt-4 space-y-4" novalidate aria-describedby="sim-desc">
+        <p id="sim-desc" class="sr-only">Formulario para calcular cuota mensual estimada</p>
+
+        <label class="block">
+          <span class="text-sm font-medium">Producto</span>
+          <select id="producto" class="mt-1 block w-full rounded-md border-gray-200 p-2" aria-label="Producto de crédito">
+            <option value="Personal" selected>Crédito Personal (1.8% mensual)</option>
+            <option value="Vehicular">Crédito Vehicular (1.5% mensual)</option>
+            <option value="Hipotecario">Crédito Hipotecario (1.1% mensual)</option>
+          </select>
+        </label>
+
+        <label class="block">
+          <span class="text-sm font-medium">Monto (COP)</span>
+          <input id="monto" type="number" min="100000" step="10000" value="2000000" required class="mt-1 block w-full rounded-md border-gray-200 p-2" aria-required="true" aria-describedby="monto-desc" />
+          <span id="monto-desc" class="text-xs text-slate-500">Ingrese el monto en pesos colombianos.</span>
+        </label>
+
+        <label class="block">
+          <span class="text-sm font-medium">Plazo (meses)</span>
+          <input id="plazo" type="number" min="6" max="360" value="24" required class="mt-1 block w-full rounded-md border-gray-200 p-2" aria-required="true" />
+        </label>
+
+        <div class="flex gap-3">
+          <button class="px-4 py-2 bg-indigo-600 text-white rounded" type="submit">Calcular</button>
+          <button class="px-4 py-2 border rounded text-indigo-600" type="button" id="resetBtn">Limpiar</button>
+        </div>
+      </form>
+
+      <div id="resultado" class="mt-4 bg-white p-4 rounded shadow hidden" aria-live="polite">
+        <h3 class="text-lg font-semibold">Resultado</h3>
+        <p id="detalle" class="mt-2 text-slate-700"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="mt-8 border-t bg-white">
+    <div class="max-w-6xl mx-auto px-4 py-4 text-sm text-slate-600">
+      CreditSmart &copy; <span id="year"></span>
+    </div>
+  </footer>
+
+  <script>
+    const rates = {
+      'Personal': 0.018,
+      'Vehicular': 0.015,
+      'Hipotecario': 0.011
+    };
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    function formatCurrency(n) {
+      return new Intl.NumberFormat('es-CO', {style:'currency', currency:'COP'}).format(n);
+    }
+
+    function calcularCuota(monto, tasa, plazo) {
+      const r = tasa;
+      const n = plazo;
+      if (r === 0) return monto / n;
+      const cuota = monto * (r / (1 - Math.pow(1 + r, -n)));
+      return cuota;
+    }
+
+    const form = document.getElementById('simForm');
+    const resultado = document.getElementById('resultado');
+    const detalle = document.getElementById('detalle');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Advanced validation
+      const monto = Number(document.getElementById('monto').value);
+      const plazo = Number(document.getElementById('plazo').value);
+      if (isNaN(monto) || monto < 100000) {
+        alert('Ingrese un monto válido (mínimo 100,000 COP).');
+        document.getElementById('monto').focus();
+        return;
+      }
+      if (isNaN(plazo) || plazo < 6 || plazo > 360) {
+        alert('Ingrese un plazo válido entre 6 y 360 meses.');
+        document.getElementById('plazo').focus();
+        return;
+      }
+      const producto = document.getElementById('producto').value;
+      const tasa = rates[producto] || 0.018;
+      const cuota = calcularCuota(monto, tasa, plazo);
+      detalle.innerHTML = `
+        Producto: <strong>${producto}</strong><br/>
+        Monto: <strong>${formatCurrency(monto)}</strong><br/>
+        Plazo: <strong>${plazo} meses</strong><br/>
+        Tasa nominal mensual: <strong>${(tasa*100).toFixed(2)}%</strong><br/>
+        Cuota estimada: <strong>${formatCurrency(cuota.toFixed(2))}</strong>
+      `;
+      resultado.classList.remove('hidden');
+      resultado.scrollIntoView({behavior:'smooth'});
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', function() {
+      form.reset();
+      resultado.classList.add('hidden');
+    });
+
+    // Preselect product from query param (accessible)
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('producto')) {
+      const p = params.get('producto');
+      const sel = document.getElementById('producto');
+      for (let i=0;i<sel.options.length;i++) {
+        if (sel.options[i].text.includes(p)) { sel.selectedIndex = i; break; }
+      }
+    }
+  </script>
+</body>
+</html>
